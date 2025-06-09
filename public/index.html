@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express MySQL App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .data-container {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Express MySQL App</h1>
+    <div class="data-container">
+      <h2>Data from MySQL:</h2>
+      <div id="data"></div>
+    </div>
+
+    <script>
+      // Fetch data from the API
+      fetch("/api/data")
+        .then((response) => response.json())
+        .then((data) => {
+          const dataContainer = document.getElementById("data");
+          if (data.length === 0) {
+            dataContainer.innerHTML = "<p>No data available</p>";
+          } else {
+            const table = document.createElement("table");
+            table.innerHTML = `
+                        <thead>
+                            <tr>
+                                ${Object.keys(data[0])
+                                  .map((key) => `<th>${key}</th>`)
+                                  .join("")}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data
+                              .map(
+                                (row) => `
+                                <tr>
+                                    ${Object.values(row)
+                                      .map((value) => `<td>${value}</td>`)
+                                      .join("")}
+                                </tr>
+                            `
+                              )
+                              .join("")}
+                        </tbody>
+                    `;
+            dataContainer.appendChild(table);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("data").innerHTML =
+            "<p>Error loading data</p>";
+        });
+    </script>
+  </body>
+</html>
