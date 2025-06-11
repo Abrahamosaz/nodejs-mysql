@@ -1,10 +1,18 @@
 terraform {
+
+  # backend "s3" {
+  #   use_lockfile = true
+  # }
+
+
   required_providers {
     aws = {
       source = "hashicorp/aws"
       version = "6.0.0-beta3"
     }
   }
+
+  
 }
 
 provider "aws" {
